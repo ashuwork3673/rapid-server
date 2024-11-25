@@ -16,7 +16,8 @@ const servicesRoutes = require('./routes/servicesRoutes');
 const stateRoutes = require('./routes/stateRoutes');
 const cardRoutes = require('./routes/cardRoutes');
 const carrierRoutes = require('./routes/carrierRoutes');
-const emailRoutes = require('./routes/follw_emailRoutes');
+const selected_carrierRoutes = require('./routes/selected_carrierRoutes');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -53,7 +54,8 @@ app.use('/api/services', servicesRoutes);
 app.use('/api/states', stateRoutes);
 app.use('/api/card', cardRoutes);
 app.use('/api/carriers', carrierRoutes);
-app.use('/api/follow', emailRoutes);
+app.use('/api/selected_carrier', selected_carrierRoutes);
+
 
 
 // Start the server

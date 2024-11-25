@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get card details by ID
+// Get card details by ID   
 router.get('/:id', async (req, res) => {
     try {
         const card = await Card.findById(req.params.id);
