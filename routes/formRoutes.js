@@ -22,6 +22,8 @@ const transporter = nodemailer.createTransport({
 const sendEmail = (recipientEmail, formData) => {
   console.log("Preparing to send email to:", recipientEmail); // Debugging log
 
+  
+
   // Create HTML content for the email
   const htmlContent = `
    <table border="0" cellpadding="0" cellspacing="0" width="70%" style="background-color: #fff;">

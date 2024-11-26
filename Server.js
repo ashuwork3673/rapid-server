@@ -6,7 +6,6 @@ const path = require("path");
 const fs = require("fs"); // For checking directory existence
 require("dotenv").config();
 
-const userRoutes = require("./routes/userRoutes");
 const formRoutes = require("./routes/formRoutes");
 const emailRouter = require('./routes/emailRouter');
 const blogRoutes = require('./routes/blogRoutes');
@@ -17,6 +16,7 @@ const stateRoutes = require('./routes/stateRoutes');
 const cardRoutes = require('./routes/cardRoutes');
 const carrierRoutes = require('./routes/carrierRoutes');
 const selected_carrierRoutes = require('./routes/selected_carrierRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 
 const app = express();
@@ -44,7 +44,6 @@ if (!fs.existsSync(uploadDir)) {
 app.use('/uploads', express.static(uploadDir));
 
 // API routes
-app.use('/api', userRoutes);
 app.use("/api/form", formRoutes);
 app.use('/api', emailRouter);
 app.use('/api', blogRoutes);
@@ -55,6 +54,7 @@ app.use('/api/states', stateRoutes);
 app.use('/api/card', cardRoutes);
 app.use('/api/carriers', carrierRoutes);
 app.use('/api/selected_carrier', selected_carrierRoutes);
+app.use('/api/auth', authRoutes);
 
 
 
