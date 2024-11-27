@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Create a schema and model for Form
 const FormSchema = new mongoose.Schema({
-  quote_id: { type: Number  },
+  quote_id: { type: Number },
   username: { type: String },
   email: { type: String },
   phone: { type: String },
@@ -18,8 +18,14 @@ const FormSchema = new mongoose.Schema({
   status: { type: String },
   sourceUrl: { type: String },
   ip: { type: String },
-  note: { type: String },
-  note_time: { type: String },
+  // Updated notes field as an array
+  notes: [
+    {
+      username:{ type:String },
+      note_content: { type: String},
+      note_time: { type: Date },
+    },
+  ],
   price: { type: Number },
   pickup_id: { type: String },
   pickup_date: { type: Date },
