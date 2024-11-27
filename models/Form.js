@@ -40,6 +40,7 @@ const FormSchema = new mongoose.Schema({
       year: { type: String, required: true },
     },
   ],
+  picked_by:{type:String}
 });
 
 module.exports = mongoose.model("Form", FormSchema);

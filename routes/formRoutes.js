@@ -878,29 +878,41 @@ router.get("/:id", async (req, res) => {
 
 // API endpoint to update a form
 router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const updatedData = req.body;
-
-  try {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid form ID" });
-    }
-
-    const updatedForm = await Form.findByIdAndUpdate(id, updatedData, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updatedForm) {
-      return res.status(404).json({ message: "Form not found" });
-    }
-
-    res.status(200).json({ message: "Form updated successfully", form: updatedForm });
-  } catch (error) {
-    console.error("Error updating form:", error);
-    res.status(500).json({ message: "Error updating form", error: error.message });
-  }
-});
+   const { id } = req.params;
+   let updatedData = req.body;
+ 
+   try {
+     // Check if ID is valid
+     if (!mongoose.Types.ObjectId.isValid(id)) {
+       return res.status(400).json({ message: "Invalid form ID" });
+     }
+ 
+     // Check if 'picked_by' field exists in the update and remove it if it's already been set
+     const form = await Form.findById(id);
+ 
+     if (form && form.picked_by) {
+       // If 'picked_by' is already set, don't allow it to be updated again
+       delete updatedData.picked_by;
+     }
+ 
+     // Perform the update
+     const updatedForm = await Form.findByIdAndUpdate(id, updatedData, {
+       new: true,
+       runValidators: true,
+     });
+ 
+     if (!updatedForm) {
+       return res.status(404).json({ message: "Form not found" });
+     }
+ 
+     // Send the response
+     res.status(200).json({ message: "Form updated successfully", form: updatedForm });
+   } catch (error) {
+     console.error("Error updating form:", error);
+     res.status(500).json({ message: "Error updating form", error: error.message });
+   }
+ });
+ 
 
 // API endpoint to delete a form by ID
 router.delete("/:id", async (req, res) => {
