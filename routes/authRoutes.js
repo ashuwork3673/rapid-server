@@ -96,30 +96,52 @@ router.get('/users', async (req, res) => {
 
 router.put('/users/:id', async (req, res) => {
   try {
-    const { id } = req.params; // Get the user ID from the URL parameter
-    const { username,password, email, full_name, phone, role, department } = req.body; // Get updated user data from the body
+    const { id } = req.params;
+    const { username, password, email, full_name, phone, role, department } = req.body;
 
     // Check if user exists
-    const user = await User.findById(id); // Find the user by ID
-    if (!user) return res.status(404).json({ message: 'User not found' }); // Return error if user is not found
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Update user fields with new data (only update fields that are provided in the request)
+    // Update user fields
     user.username = username || user.username;
     user.email = email || user.email;
-    user.password = password || user.password;
     user.full_name = full_name || user.full_name;
     user.phone = phone || user.phone;
     user.role = role || user.role;
     user.department = department || user.department;
 
+    // Update password if provided
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
     // Save the updated user
     await user.save();
-    res.status(200).json({ message: 'User updated successfully', user }); // Return success response with updated user
 
+    // Automatically log in the user if the password was updated
+    if (password) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      return res.status(200).json({
+        message: 'User updated and logged in successfully',
+        token,
+        user: {
+          username: user.username,
+          full_name: user.full_name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+        },
+      });
+    }
+
+    res.status(200).json({ message: 'User updated successfully', user });
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message }); // Return error response in case of an exception
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
+
 
 // Delete User
 router.delete('/users/:id', async (req, res) => {

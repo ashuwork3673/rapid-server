@@ -936,6 +936,35 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+
+// DELETE cars field from a document
+router.patch("/update-cars/:quote_id", async (req, res) => {
+   const { quote_id } = req.params;
+   const { cars } = req.body;
+ 
+   try {
+     const updatedForm = await Form.findOneAndUpdate(
+       { quote_id },
+       { cars },
+       { new: true } // Return the updated document
+     );
+ 
+     if (!updatedForm) {
+       return res.status(404).json({ message: "Document not found" });
+     }
+ 
+     res.status(200).json({
+       message: "Cars updated successfully",
+       data: updatedForm,
+     });
+   } catch (error) {
+     console.error("Error updating cars:", error);
+     res.status(500).json({ message: "Internal Server Error" });
+   }
+ });
+ 
+
 // GET endpoint to retrieve the client's IP address
 router.get("/ip", (req, res) => {
   const ip =
