@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-
 // Define the schema for the Blog model
-const servicesSchema = new mongoose.Schema({
+const newservicesSchema = new mongoose.Schema({
   id: {
     type: Number,
   },
@@ -63,6 +62,6 @@ const servicesSchema = new mongoose.Schema({
 });
 
 // Create and export the Blog model
-const Services = mongoose.model("Services", servicesSchema);
+const NewServices = mongoose.model("NewServices", newservicesSchema);
 
-module.exports = Services;
+module.exports = NewServices;

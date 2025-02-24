@@ -6,12 +6,12 @@ const Form = require("../models/Form");
 const mongoose = require("mongoose");
 const router = express.Router();
 
-// Load environment variables from .env file
+// Load environment variables from .env file .enve file is the global variables type which fetches all thing accordingly
 dotenv.config();
 
 // Email setup using environment variables
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Or use your email provider
+  service: "gmail", // Or use your email provider
   auth: {
     user: process.env.EMAIL_USER, // Use the email from environment variables
     pass: process.env.EMAIL_PASS, // Use the password from environment variables
@@ -21,8 +21,6 @@ const transporter = nodemailer.createTransport({
 // Function to send the email with HTML content
 const sendEmail = (recipientEmail, formData) => {
   console.log("Preparing to send email to:", recipientEmail); // Debugging log
-
-  
 
   // Create HTML content for the email
   const htmlContent = `
@@ -46,7 +44,7 @@ const sendEmail = (recipientEmail, formData) => {
                <td align="center" style="padding: 0 15px">
                   <span style="font-size: 14px; display: block; line-height: normal">5-star rated company
                   with
-                  <br />over 28,000 vehicles
+                  <br/>over 28,000 vehicles
                   shipped!</span>
                </td>
             </tr>
@@ -728,7 +726,7 @@ const sendEmail = (recipientEmail, formData) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: recipientEmail, // Send email to the recipient from the form database
-    subject: 'Thankyou for Submiting Form',
+    subject: "Thankyou for Submiting Form",
     html: htmlContent, // Use HTML content
   };
 
@@ -742,8 +740,8 @@ const sendEmail = (recipientEmail, formData) => {
 };
 
 // Set up cron job to send an email every day at 1 PM
-cron.schedule('20 13 * * *', async () => {
-  console.log('Cron job triggered at:', new Date()); // Debugging log
+cron.schedule("20 13 * * *", async () => {
+  console.log("Cron job triggered at:", new Date()); // Debugging log
 
   try {
     // Retrieve forms with a pickup_date in the future
@@ -788,7 +786,7 @@ router.post("/", async (req, res) => {
     price,
     pickup_id,
     payment_url,
-    cars,  // New cars array from the request
+    cars, // New cars array from the request
   } = req.body;
 
   // Automatically capture the client's IP address
@@ -836,10 +834,11 @@ router.post("/", async (req, res) => {
     // Send the email to the recipient email from the form
     console.log("Sending email to:", email); // Debugging log
     sendEmail(email, formData); // Send email to the email in the form
-
   } catch (error) {
     console.error("Error saving form:", error);
-    res.status(500).json({ message: "Error saving form", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error saving form", error: error.message });
   }
 });
 
@@ -850,7 +849,9 @@ router.get("/", async (req, res) => {
     res.status(200).json(formData);
   } catch (error) {
     console.error("Error fetching forms:", error);
-    res.status(500).json({ message: "Error fetching forms", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching forms", error: error.message });
   }
 });
 
@@ -872,47 +873,52 @@ router.get("/:id", async (req, res) => {
     res.status(200).json(form);
   } catch (error) {
     console.error("Error fetching form by ID:", error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
 // API endpoint to update a form
 router.put("/:id", async (req, res) => {
-   const { id } = req.params;
-   let updatedData = req.body;
- 
-   try {
-     // Check if ID is valid
-     if (!mongoose.Types.ObjectId.isValid(id)) {
-       return res.status(400).json({ message: "Invalid form ID" });
-     }
- 
-     // Check if 'picked_by' field exists in the update and remove it if it's already been set
-     const form = await Form.findById(id);
- 
-     if (form && form.picked_by) {
-       // If 'picked_by' is already set, don't allow it to be updated again
-       delete updatedData.picked_by;
-     }
- 
-     // Perform the update
-     const updatedForm = await Form.findByIdAndUpdate(id, updatedData, {
-       new: true,
-       runValidators: true,
-     });
- 
-     if (!updatedForm) {
-       return res.status(404).json({ message: "Form not found" });
-     }
- 
-     // Send the response
-     res.status(200).json({ message: "Form updated successfully", form: updatedForm });
-   } catch (error) {
-     console.error("Error updating form:", error);
-     res.status(500).json({ message: "Error updating form", error: error.message });
-   }
- });
- 
+  const { id } = req.params;
+  let updatedData = req.body;
+
+  try {
+    // Check if ID is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid form ID" });
+    }
+
+    // Check if 'picked_by' field exists in the update and remove it if it's already been set
+    const form = await Form.findById(id);
+
+    if (form && form.picked_by) {
+      // If 'picked_by' is already set, don't allow it to be updated again
+      delete updatedData.picked_by;
+    }
+
+    // Perform the update
+    const updatedForm = await Form.findByIdAndUpdate(id, updatedData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    // Send the response
+    res
+      .status(200)
+      .json({ message: "Form updated successfully", form: updatedForm });
+  } catch (error) {
+    console.error("Error updating form:", error);
+    res
+      .status(500)
+      .json({ message: "Error updating form", error: error.message });
+  }
+});
 
 // API endpoint to delete a form by ID
 router.delete("/:id", async (req, res) => {
@@ -932,38 +938,108 @@ router.delete("/:id", async (req, res) => {
     res.status(200).json({ message: "Form deleted successfully" });
   } catch (error) {
     console.error("Error deleting form:", error);
-    res.status(500).json({ message: "Error deleting form", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting form", error: error.message });
   }
 });
 
-
-
 // DELETE cars field from a document
 router.patch("/update-cars/:quote_id", async (req, res) => {
-   const { quote_id } = req.params;
-   const { cars } = req.body;
- 
-   try {
-     const updatedForm = await Form.findOneAndUpdate(
-       { quote_id },
-       { cars },
-       { new: true } // Return the updated document
-     );
- 
-     if (!updatedForm) {
-       return res.status(404).json({ message: "Document not found" });
-     }
- 
-     res.status(200).json({
-       message: "Cars updated successfully",
-       data: updatedForm,
-     });
-   } catch (error) {
-     console.error("Error updating cars:", error);
-     res.status(500).json({ message: "Internal Server Error" });
-   }
- });
- 
+  const { quote_id } = req.params;
+  const { cars } = req.body;
+
+  try {
+    const updatedForm = await Form.findOneAndUpdate(
+      { quote_id },
+      { cars },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    res.status(200).json({
+      message: "Cars updated successfully",
+      data: updatedForm,
+    });
+  } catch (error) {
+    console.error("Error updating cars:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.patch("/update-notes/:quote_id", async (req, res) => {
+  const { quote_id } = req.params;
+  const { notes } = req.body;
+
+  // Validate that notes is provided and is an array
+  if (!Array.isArray(notes) || notes.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Invalid notes format or empty notes array" });
+  }
+
+  const updatedNote = notes[0]; // Extract the single note object
+  if (!updatedNote.note_id || !updatedNote.note_content) {
+    return res
+      .status(400)
+      .json({ message: "note_id and note_content are required" });
+  }
+
+  try {
+    // Update the specific note in the document
+    const updatedForm = await Form.findOneAndUpdate(
+      { quote_id, "notes.note_id": updatedNote.note_id },
+      { $set: { "notes.$.note_content": updatedNote.note_content } },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Document or note not found" });
+    }
+
+    res.status(200).json({
+      message: "Note updated successfully",
+      data: updatedForm,
+    });
+  } catch (error) {
+    console.error("Error updating notes:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.delete("/delete-note/:quote_id", async (req, res) => {
+  const { quote_id } = req.params;
+  const { note_id } = req.body; // Get note_id from the request body
+
+  // Validate the presence of note_id
+  if (!note_id) {
+    return res.status(400).json({ message: "note_id is required" });
+  }
+
+  try {
+    // Find and update the document by removing the specific note
+    const updatedForm = await Form.findOneAndUpdate(
+      { quote_id },
+      { $pull: { notes: { note_id } } }, // Remove the note matching note_id
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Document or note not found" });
+    }
+
+    res.status(200).json({
+      message: "Note deleted successfully",
+      data: updatedForm,
+    });
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 // GET endpoint to retrieve the client's IP address
 router.get("/ip", (req, res) => {

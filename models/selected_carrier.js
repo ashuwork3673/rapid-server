@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const SelectedCarrier = new mongoose.Schema(
   {
@@ -19,4 +19,4 @@ const SelectedCarrier = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('selected_carrier', SelectedCarrier);
+module.exports = mongoose.model("selected_carrier", SelectedCarrier);

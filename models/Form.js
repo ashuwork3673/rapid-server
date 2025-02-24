@@ -21,8 +21,9 @@ const FormSchema = new mongoose.Schema({
   // Updated notes field as an array
   notes: [
     {
-      username:{ type:String },
-      note_content: { type: String},
+      note_id: { type: Number },
+      username: { type: String },
+      note_content: { type: String },
       note_time: { type: Date },
     },
   ],
@@ -40,7 +41,7 @@ const FormSchema = new mongoose.Schema({
       year: { type: String, required: true },
     },
   ],
-  picked_by:{type:String}
+  picked_by: { type: String },
 });
 
 module.exports = mongoose.model("Form", FormSchema);

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Define the schema for the Blog model
-const servicesSchema = new mongoose.Schema({
+const city_to_citySchema = new mongoose.Schema({
   id: {
     type: Number,
   },
@@ -28,8 +28,7 @@ const servicesSchema = new mongoose.Schema({
     type: String,
   },
   meta: {
-    type: String, // Store the meta tags as a string or as an array of strings
-    required: false,
+    type: String,
   },
   pageH1: {
     type: String,
@@ -49,9 +48,6 @@ const servicesSchema = new mongoose.Schema({
   content: {
     type: String,
   },
-  fq: {
-    type: String,
-  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -63,6 +59,6 @@ const servicesSchema = new mongoose.Schema({
 });
 
 // Create and export the Blog model
-const Services = mongoose.model("Services", servicesSchema);
+const City_to_city = mongoose.model("City_to_city", city_to_citySchema);
 
-module.exports = Services;
+module.exports = City_to_city;

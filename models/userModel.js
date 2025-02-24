@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // User Schema Definition
 const UserSchema = new mongoose.Schema({
@@ -31,7 +31,6 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String, // Example roles
-    
   },
   status: {
     type: Boolean,
@@ -43,7 +42,7 @@ const UserSchema = new mongoose.Schema({
   },
   ip: {
     type: String,
-    default: () => '0.0.0.0', // Default IP if not provided
+    default: () => "0.0.0.0", // Default IP if not provided
   },
   last_login: {
     type: Date,
@@ -52,4 +51,4 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

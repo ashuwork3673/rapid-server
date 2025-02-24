@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Define the schema for the Blog model
-const servicesSchema = new mongoose.Schema({
+const newslugSchema = new mongoose.Schema({
   id: {
     type: Number,
   },
@@ -49,8 +49,8 @@ const servicesSchema = new mongoose.Schema({
   content: {
     type: String,
   },
-  fq: {
-    type: String,
+  type: {
+    type: String, // Ensures the slug is unique for each blog
   },
   createdAt: {
     type: Date,
@@ -63,6 +63,6 @@ const servicesSchema = new mongoose.Schema({
 });
 
 // Create and export the Blog model
-const Services = mongoose.model("Services", servicesSchema);
+const NewSlug = mongoose.model("NewSlug", newslugSchema);
 
-module.exports = Services;
+module.exports = NewSlug;

@@ -1,9 +1,9 @@
 // Middleware for JWT Authentication
 const authMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+  const token = req.headers["authorization"]?.split(" ")[1]; // Extract token from Authorization header
 
   if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
+    return res.status(401).json({ message: "No token provided" });
   }
 
   try {
@@ -12,7 +12,7 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded; // Attach decoded user to request object
     next(); // Continue to the next middleware or route
   } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
 

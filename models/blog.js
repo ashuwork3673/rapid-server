@@ -12,9 +12,27 @@ const blogSchema = new mongoose.Schema({
     type: String,
     unique: true, // Ensures the slug is unique for each blog
   },
-  metaTags: {
-    type: String, // Store the meta tags as a string or as an array of strings
-    required: false,
+  // metaTags: {
+  //   type: String, // Store the meta tags as a string or as an array of strings
+  //   required: false,
+  // },
+  meta_title: {
+    type: String,
+  },
+  meta_description: {
+    type: String,
+  },
+  schema: {
+    type: String,
+  },
+  robust_meta: {
+    type: String,
+  },
+  canonical: {
+    type: String,
+  },
+  meta: {
+    type: String,
   },
   pageH1: {
     type: String,
@@ -34,11 +52,6 @@ const blogSchema = new mongoose.Schema({
   content: {
     type: String,
   },
-  images: [
-    {
-      type: String, // Store image paths/URLs in an array
-    },
-  ],
   createdAt: {
     type: Date,
     default: Date.now,
